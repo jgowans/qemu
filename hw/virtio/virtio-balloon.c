@@ -677,15 +677,18 @@ static void virtio_balloon_set_config(VirtIODevice *vdev,
     VirtIOBalloon *dev = VIRTIO_BALLOON(vdev);
     struct virtio_balloon_config config;
     uint32_t oldactual = dev->actual;
+    uint32_t oldnumpages = dev->num_pages;
     ram_addr_t vm_ram_size = get_current_ram_size();
 
     memcpy(&config, config_data, sizeof(struct virtio_balloon_config));
     dev->actual = le32_to_cpu(config.actual);
+    dev->num_pages = le32_to_cpu(config.num_pages);
     if (dev->actual != oldactual) {
         qapi_event_send_balloon_change(vm_ram_size -
                         ((ram_addr_t) dev->actual << VIRTIO_BALLOON_PFN_SHIFT));
     }
     trace_virtio_balloon_set_config(dev->actual, oldactual);
+    trace_virtio_balloon_set_config(dev->num_pages, oldnumpages);
 }
 
 static uint64_t virtio_balloon_get_features(VirtIODevice *vdev, uint64_t f,
