@@ -55,6 +55,9 @@
 #include "sysemu/numa.h"
 #include "hw/mem/nvdimm.h"
 
+/* TODO add .h file */
+extern void jgowans_iommu_create(void);
+
 /* ICH9 AHCI has 6 ports */
 #define MAX_SATA_PORTS     6
 
@@ -183,6 +186,7 @@ static void pc_q35_init(MachineState *machine)
     x86_cpus_init(x86ms, pcmc->default_cpu_version);
 
     kvmclock_create();
+    jgowans_iommu_create();
 
     /* pci enabled */
     if (pcmc->pci_enabled) {
